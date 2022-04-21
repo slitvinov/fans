@@ -1,4 +1,3 @@
-#include "embed.h"
 #include "view.h"
 #include "draw.h"
 #include "navier-stokes/centered.h"
@@ -12,7 +11,7 @@ scalar omega[];
 int main() {
   L0 = 2.;
   origin (-0.5, -L0/2.);
-  N = 128;
+  N = 64;
   mu = muv;
   a = av;
   run();
@@ -30,9 +29,6 @@ p[left]    = neumann(0.);
 u.n[right] = neumann(0.);
 p[right]   = dirichlet(0.);
 
-u.n[embed] = neumann(0.0);
-u.t[embed] = neumann(0.0);
-
 event init (t = 0)
 {
   foreach()
@@ -42,7 +38,7 @@ event init (t = 0)
 event logfile (i++)
   fprintf (stderr, "%d %g %d %d\n", i, t, mgp.i, mgu.i);
 
-event movies (i += 4; t <= 15.)
+event movies (i += 1; t <= 15.)
 {
   char path[1024];
 

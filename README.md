@@ -6,6 +6,8 @@ $ cd basilisk/src
 $ >Makefile.tests
 $ cp config.gcc config
 $ BASILISK="`pwd`" make qcc draw_get.h draw_json.h
+$ cd gl
+$ make
 </pre>
 
 
