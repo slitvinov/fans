@@ -1,8 +1,8 @@
 #include "embed.h"
 #include "navier-stokes/centered.h"
 
-double Reynolds = 160.;
-int maxlevel = 9;
+double Reynolds = 10000.;
+int maxlevel = 10;
 face vector muv[];
 face vector av[];
 
@@ -12,7 +12,6 @@ int main() {
   N = 512;
   mu = muv;
   a = av;
-  periodic(right);
   run();
 }
 
@@ -22,11 +21,14 @@ event properties (i++)
     muv.x[] = fm.x[]*0.125/Reynolds;
 }
 
-u.n[left]  = dirichlet(0.0);
-p[left]    = neumann(0.0);
+u.n[left]  = dirichlet(1.0);
+p[left]    = neumann(0.);
 
-u.n[embed] = fabs(y) > 0.25 ? neumann(0.0) : dirichlet(0.0);
-u.t[embed] = fabs(y) > 0.25 ? neumann(0.0) : dirichlet(0.0);
+u.n[right] = neumann(0.);
+p[right]   = dirichlet(0.);
+
+u.n[embed] = neumann(0.0);
+u.t[embed] = neumann(0.0);
 
 event init (t = 0)
 {
@@ -41,22 +43,22 @@ event movies (i += 4; t <= 15.)
 {
   scalar omega[], m[];
   vorticity (u, omega);
-  foreach()
-    m[] = cs[] - 0.5;
   char path[1024];
   sprintf(path, "vort.%05d.ppm", i);
   output_ppm (omega, file = path, box = {{-0.5,-0.5},{7.5,0.5}},
-	      min = -10, max = 10, linear = true, mask = m);
+	      min = -10, max = 10, linear = true);
   
   sprintf(path, "pressure.%05d.ppm", i);
   output_ppm (p, file = path, box = {{-0.5,-0.5},{7.5,0.5}},
-	      min = -0.1, max = 0.1, linear = true, mask = m);  
+	      min = -0.1, max = 0.1, linear = true);
 }
 
 event acceleration (i++) {
   foreach_face(x) {
-    if (fabs(y) < 0.1 && fabs(x - 5.0) < 0.1)
+    if (fabs(y - 0.25) < 0.1 && fabs(x - 0.25) < 0.1)
       av.x[] += 20.0;
+    if (fabs(y + 0.25) < 0.1 && fabs(x - 0.25) < 0.1)
+      av.x[] += 10.0;
   }
 }
 
