@@ -3,15 +3,16 @@
 #include "draw.h"
 #include "navier-stokes/centered.h"
 
-double Reynolds = 100000.;
+double Reynolds = 1000000.;
 int maxlevel = 4;
 face vector muv[];
 face vector av[];
+scalar omega[];
 
 int main() {
   L0 = 2.;
   origin (-0.5, -L0/2.);
-  N = 64;
+  N = 128;
   mu = muv;
   a = av;
   run();
@@ -35,7 +36,7 @@ u.t[embed] = neumann(0.0);
 event init (t = 0)
 {
   foreach()
-    u.x[] = 1.0;
+    u.x[] = 0.0;
 }
 
 event logfile (i++)
@@ -43,14 +44,13 @@ event logfile (i++)
 
 event movies (i += 4; t <= 15.)
 {
-  scalar omega[];
   char path[1024];
 
   vorticity (u, omega);
   sprintf(path, "vort.%05d.ppm", i);
   output_ppm (omega, file = path, box = {{-0.5,-0.5},{1.5,0.5}},
 	      min = -20, max = 20, linear = true);
-  view (width = 1200, height = 800, tx = -0.25, fov = 15);
+  view (width = 1400, height = 800, tx = -0.25, fov = 15);
   isosurface("omega", 10);
   isosurface("omega", -10);
   sprintf(path, "omega.%05d.ppm", i);
