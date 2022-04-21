@@ -1,4 +1,4 @@
-# Install
+<h1>Install</h1>
 
 <pre>
 $ git clone git@github.com:slitvinov/basilisk
@@ -16,3 +16,4 @@ $ ~/basilisk/src/qcc bump.c -lm
 $ ./a.out > a.ppm
 $ animate a.ppm
 </pre>
+
