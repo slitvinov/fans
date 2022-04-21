@@ -9,7 +9,7 @@ face vector av[];
 int main() {
   L0 = 8.;
   origin (-0.5, -L0/2.);
-  N = 512;
+  N = 2048;
   mu = muv;
   a = av;
   run();
@@ -46,7 +46,7 @@ event movies (i += 4; t <= 15.)
   char path[1024];
   sprintf(path, "vort.%05d.ppm", i);
   output_ppm (omega, file = path, box = {{-0.5,-0.5},{7.5,0.5}},
-	      min = -10, max = 10, linear = true);
+	      min = -100, max = 100, linear = true);
   
   sprintf(path, "pressure.%05d.ppm", i);
   output_ppm (p, file = path, box = {{-0.5,-0.5},{7.5,0.5}},
